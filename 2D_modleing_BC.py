@@ -100,7 +100,7 @@ u1 = np.zeros((nx, nz))
 u2 = np.zeros((nx, nz))
 u3 = np.zeros((nx, nz))
 
-vir_s = np.zeros((mnx, mnz))
+vir_s = np.zeros((mnx, mnz, nt))
 for it in range(nt):
     if it % 100 == 1:
         print('Time step =', it)
@@ -108,7 +108,7 @@ for it in range(nt):
     for ix in range(1, nx - 1):
         for iz in range(1, nz - 1):
             u3[ix, iz] = 2 * u2[ix, iz] - u1[ix, iz] + (T_vp[ix, iz] ** 2) * (dt ** 2) + force_x[it] * shot[ix, iz]
-            vir_s[ix, iz] = 2 / vp[ix, iz] ** 3 * (u3[ix, iz] - 2 * u2[ix, iz] + u1[ix, iz]) / dx ** 2
+            vir_s[ix, iz, it] = 2 / vp[ix, iz] ** 3 * (u3[ix, iz] - 2 * u2[ix, iz] + u1[ix, iz]) / dx ** 2
 
     if it % 100 == 1:
         plt.figure(1)
@@ -151,7 +151,7 @@ shot_x = np.array([100 + iabs_thick])
 shot_z = np.array([100 + order])
 shot = np.zeros((nx, nz))
 shot[shot_x, shot_z] = 1
-force_x = vir_s[shot_x, shot_z]
+force_x = vir_s[shot_x, shot_z,:]
 
 u1 = np.zeros((nx, nz))
 u2 = np.zeros((nx, nz))
